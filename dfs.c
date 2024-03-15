@@ -25,9 +25,22 @@ int main()
 {
     adjacency_list_t *adjacencyList = readMazeStructureFromFile("maze2.txt");
     linked_list_t *route = NULL;
-    pushLinkedList(&route, createNode(1,1));
+    node_t *node_first = createNode(1,1);
+    node_t *node_last = createNode(adjacencyList->height, adjacencyList->width);
+    pushLinkedList(&route, node_first);
     unsigned char *visited = calloc(adjacencyList->width * adjacencyList->height, sizeof *visited);
-    DFS(adjacencyList, route, visited, createNode(1,1), createNode(4,5));
+    DFS(adjacencyList, route, visited, node_first, node_last);
+    linked_list_t *prev = route;
     route = route->next;
+    free(prev);
     printLinkedList(route);
+    for(int i = adjacencyList->height * adjacencyList->width - 1; i >= 0; i--)
+    {
+        freeAdjacencyList((adjacencyList+i));
+    }
+    free(node_first);
+    free(node_last);
+    freeLinkedList(route);
+    free(adjacencyList);
+    free(visited);
 }

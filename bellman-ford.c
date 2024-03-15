@@ -47,6 +47,7 @@ void bellmanFordSolve(adjacency_list_t *adjacencyList, linked_list_t *route, nod
             if(dist[u] != 2e7 && dist[u] + weight < dist[adjIndex])
             {
                 printf("Graph has negative cycle\n");
+                free(parent);
                 exit(0);
             }
             adjacentNodes = adjacentNodes->next;
@@ -60,16 +61,29 @@ void bellmanFordSolve(adjacency_list_t *adjacencyList, linked_list_t *route, nod
         curr = (parent+(curr->x - 1) * adjacencyList->width + curr->y - 1);
     }
     pushLinkedList(&route, curr);
+    free(parent);
     return;
 }
 
 int main()
 {
-    adjacency_list_t *adjacencyList = readMazeStructureFromFile("maze.txt");
+    adjacency_list_t *adjacencyList = readMazeStructureFromFile("maze2.txt");
     linked_list_t *route = NULL;
-    pushLinkedList(&route, createNode(1,1));
-    bellmanFordSolve(adjacencyList, route, createNode(1,1), createNode(4,5));
+    node_t *node_first = createNode(1, 1);
+    node_t *node_last = createNode(adjacencyList->height, adjacencyList->width);
+    pushLinkedList(&route, node_first);
+    bellmanFordSolve(adjacencyList, route, node_first, node_last);
+    linked_list_t *prev = route;
     route = route->next;
+    free(prev);
     reverseLinkedList(&route);
     printLinkedList(route);
+    for(int i = adjacencyList->height * adjacencyList->width - 1; i >= 0; i--)
+    {
+        freeAdjacencyList((adjacencyList+i));
+    }
+    free(node_first);
+    free(node_last);
+    freeLinkedList(route);
+    free(adjacencyList);
 }

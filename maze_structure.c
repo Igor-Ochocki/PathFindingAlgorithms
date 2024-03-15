@@ -85,3 +85,20 @@ int getNodeIndex(node_t *node)
 {
     return ((node->x - 1) * 1024 + (node->y - 1));
 }
+
+void freeAdjacencyList(adjacency_list_t *adjacencyList)
+{
+    free(adjacencyList->node);
+    freeLinkedList(adjacencyList->adjacent);
+}
+
+void freeLinkedList(linked_list_t *linkedList)
+{
+    linked_list_t *curr = linkedList;
+    while(curr != NULL)
+    {
+        linked_list_t *prev = curr;
+        curr = curr->next;
+        free(prev);
+    }
+}

@@ -64,15 +64,42 @@ void rightHandSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_
             break;
         }
     }
+    free(nodeUp);
+    free(nodeRight);
+    free(nodeDown);
+    free(nodeLeft);
 }
 
 int main()
 {
     adjacency_list_t *adjacencyList = readMazeStructureFromFile("maze2.txt");
     linked_list_t *route = NULL;
-    pushLinkedList(&route, createNode(1,1));
-    rightHandSolve(adjacencyList, route, createNode(1,1), NULL, createNode(4,5));
+    node_t *node_first = createNode(1, 1);
+    node_t *node_last = createNode(adjacencyList->height, adjacencyList->width);
+    pushLinkedList(&route, node_first);
+    rightHandSolve(adjacencyList, route, node_first, NULL, node_last);
+    linked_list_t *prev = route;
     route = route->next;
+    free(prev);
     printLinkedList(route);
+    unsigned char *visited = calloc(adjacencyList->height * adjacencyList->width, sizeof *visited);
+    while(route != NULL)
+    {
+        linked_list_t *prev = route;
+        route = route->next;
+        if(*(visited + (prev->node->x - 1) * adjacencyList->width + (prev->node->y - 1)) == 0)
+        {
+            *(visited + (prev->node->x - 1) * adjacencyList->width + (prev->node->y - 1)) = 1;
+            free(prev->node);
+        }
+        free(prev);
+    }
+    for(int i = adjacencyList->height * adjacencyList->width - 1; i >= 0; i--)
+    {
+        freeAdjacencyList((adjacencyList+i));
+    }
+    free(node_first);
+    free(node_last);
+    free(adjacencyList);
     return 0;
 }

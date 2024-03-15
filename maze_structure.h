@@ -25,6 +25,8 @@ void reverseLinkedList(linked_list_t **linkedListPointer);
 node_t *popLinkedList(linked_list_t **linkedListPointer);
 void printLinkedList(linked_list_t *linkedList);
 int getNodeIndex(node_t *node);
+void freeAdjacencyList(adjacency_list_t *adjacencyList);
+void freeLinkedList(linked_list_t *linkedList);
 
 
 #endif

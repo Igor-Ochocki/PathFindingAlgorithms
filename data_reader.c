@@ -55,6 +55,7 @@ adjacency_list_t *readMazeStructureFromFile(char *fileName)
 
         row++;
     }
+    fclose(in);
     return adjacencyList;
 }
 
