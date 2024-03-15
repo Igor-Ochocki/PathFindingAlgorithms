@@ -27,7 +27,14 @@ void rightHandSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_
 {
     pushLinkedList(&route, currentNode);
     if(currentNode->x == targetNode->x && currentNode->y == targetNode->y)
+    {
+        linked_list_t *prev = route;
+        route = route->next;
+        free(prev);
+        printLinkedList(route);
+        freeLinkedList(route);
         return;
+    }
     int currentIndex = (currentNode->x - 1) * adjacencyList->width + currentNode->y - 1;
     enum Directions dir;
     if(prevNode == NULL)
@@ -61,6 +68,7 @@ void rightHandSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_
         {
             node_t *curr = createNode(nodes[dir][i]->x, nodes[dir][i]->y);
             rightHandSolve(adjacencyList, route, curr, currentNode, targetNode);
+            free(curr);
             break;
         }
     }
@@ -78,22 +86,6 @@ int main()
     node_t *node_last = createNode(adjacencyList->height, adjacencyList->width);
     pushLinkedList(&route, node_first);
     rightHandSolve(adjacencyList, route, node_first, NULL, node_last);
-    linked_list_t *prev = route;
-    route = route->next;
-    free(prev);
-    printLinkedList(route);
-    unsigned char *visited = calloc(adjacencyList->height * adjacencyList->width, sizeof *visited);
-    while(route != NULL)
-    {
-        linked_list_t *prev = route;
-        route = route->next;
-        if(*(visited + (prev->node->x - 1) * adjacencyList->width + (prev->node->y - 1)) == 0)
-        {
-            *(visited + (prev->node->x - 1) * adjacencyList->width + (prev->node->y - 1)) = 1;
-            free(prev->node);
-        }
-        free(prev);
-    }
     for(int i = adjacencyList->height * adjacencyList->width - 1; i >= 0; i--)
     {
         freeAdjacencyList((adjacencyList+i));
