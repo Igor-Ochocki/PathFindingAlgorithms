@@ -15,6 +15,8 @@ typedef struct ll {
 typedef struct aj {
     struct n *node;
     struct ll *adjacent;
+    int width;
+    int height;
 } adjacency_list_t;
 
 node_t *createNode(int x, int y);

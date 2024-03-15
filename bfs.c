@@ -51,31 +51,31 @@ void BFS(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *startNod
 {
     queue_t *queue = NULL;
     enqueue(&queue, startNode);
-    unsigned char *visited = calloc(MAX_HEIGHT * MAX_WIDTH, sizeof *visited);
-    int targetIndex = (targetNode->x - 1) * MAX_HEIGHT + (targetNode->y - 1);
-    node_t *parent = malloc(sizeof *parent * MAX_HEIGHT * MAX_WIDTH);
+    unsigned char *visited = calloc(adjacencyList->height * adjacencyList->width, sizeof *visited);
+    int targetIndex = (targetNode->x - 1) * adjacencyList->width + (targetNode->y - 1);
+    node_t *parent = malloc(sizeof *parent * adjacencyList->height * adjacencyList->width);
     node_t *curr, *next;
 
     while((curr = dequeue(&queue)) != NULL)
     {
-        int currentIndex = (curr->x - 1) * MAX_HEIGHT + (curr->y - 1);
+        int currentIndex = (curr->x - 1) * adjacencyList->width + (curr->y - 1);
         *(visited+currentIndex) = 1;
         if(*(visited+targetIndex) == 1)
             continue;
         
         while((next = popLinkedList(&(adjacencyList+currentIndex)->adjacent)) != NULL)
         {
-            if(*(visited + (next->x - 1) * MAX_HEIGHT + next->y - 1) == 1)
+            if(*(visited + (next->x - 1) * adjacencyList->width + next->y - 1) == 1)
                 continue;
             enqueue(&queue, next);
-            *(parent + (next->x - 1) * MAX_HEIGHT + next->y - 1) = *curr;
+            *(parent + (next->x - 1) * adjacencyList->width + next->y - 1) = *curr;
         }
     }
     curr = targetNode;
     while(curr->x != startNode->x || curr->y != startNode->y)
     {
         pushLinkedList(&route, curr);
-        curr = (parent+(curr->x - 1) * MAX_HEIGHT + curr->y - 1);
+        curr = (parent+(curr->x - 1) * adjacencyList->width + curr->y - 1);
     }
     pushLinkedList(&route, curr);
 }

@@ -3,15 +3,15 @@
 
 void Dijkstra(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *startNode, node_t *targetNode)
 {
-    int dist[MAX_HEIGHT * MAX_WIDTH];
-    unsigned char *visited = calloc(MAX_HEIGHT * MAX_WIDTH, sizeof *visited);
+    int dist[adjacencyList->height * adjacencyList->width];
+    unsigned char *visited = calloc(adjacencyList->height * adjacencyList->width, sizeof *visited);
 
-    for(int i = 0; i < MAX_HEIGHT * MAX_WIDTH; i++)
+    for(int i = 0; i < adjacencyList->height * adjacencyList->width; i++)
         dist[i] = INT_MAX;
     
-    dist[(startNode->x - 1) * MAX_HEIGHT + startNode->y - 1] = 0;
+    dist[(startNode->x - 1) * adjacencyList->width + startNode->y - 1] = 0;
 
-    node_t *parent = malloc(sizeof *parent * MAX_HEIGHT * MAX_WIDTH);
+    node_t *parent = malloc(sizeof *parent * adjacencyList->height * adjacencyList->width);
 
     weighted_linked_list_t *wll = NULL;
     pushWeightedLinkedList(&wll, startNode, 0);
@@ -19,7 +19,7 @@ void Dijkstra(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *sta
     node_t *currentNode;
     while((currentNode = getLowestWeightNode(&wll)) != NULL)
     {
-        int currentIndex = (currentNode->x - 1) * MAX_HEIGHT + currentNode->y - 1;
+        int currentIndex = (currentNode->x - 1) * adjacencyList->width + currentNode->y - 1;
         
         *(visited+currentIndex) = 1;
 
@@ -27,7 +27,7 @@ void Dijkstra(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *sta
         while(adjacentNodes != NULL)
         {
             node_t *adjacent = adjacentNodes->node;
-            int adjIndex = (adjacent->x - 1) * MAX_HEIGHT + adjacent->y - 1;
+            int adjIndex = (adjacent->x - 1) * adjacencyList->width + adjacent->y - 1;
             if(*(visited+adjIndex) != 1)
             {
                 int newDistance = dist[currentIndex] + 1;
@@ -45,7 +45,7 @@ void Dijkstra(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *sta
     while(curr->x != startNode->x || curr->y != startNode->y)
     {
         pushLinkedList(&route, curr);
-        curr = (parent+(curr->x - 1) * MAX_HEIGHT + curr->y - 1);
+        curr = (parent+(curr->x - 1) * adjacencyList->width + curr->y - 1);
     }
     pushLinkedList(&route, curr);
     return;

@@ -28,7 +28,7 @@ void rightHandSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_
     pushLinkedList(&route, currentNode);
     if(currentNode->x == targetNode->x && currentNode->y == targetNode->y)
         return;
-    int currentIndex = (currentNode->x - 1) * 1024 + currentNode->y - 1;
+    int currentIndex = (currentNode->x - 1) * adjacencyList->width + currentNode->y - 1;
     enum Directions dir;
     if(prevNode == NULL)
         dir = DOWN;
@@ -68,7 +68,7 @@ void rightHandSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_
 
 int main()
 {
-    adjacency_list_t *adjacencyList = readMazeStructureFromFile("maze.txt");
+    adjacency_list_t *adjacencyList = readMazeStructureFromFile("maze2.txt");
     linked_list_t *route = NULL;
     pushLinkedList(&route, createNode(1,1));
     rightHandSolve(adjacencyList, route, createNode(1,1), NULL, createNode(4,5));
