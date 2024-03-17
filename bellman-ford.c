@@ -1,7 +1,7 @@
 #include "dijkstra.h"
 #include <limits.h>
 
-void bellmanFordSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *startNode, node_t *targetNode)
+node_t *bellmanFordSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *startNode, node_t *targetNode)
 {
     int dist[adjacencyList->height * adjacencyList->width];
 
@@ -61,23 +61,23 @@ void bellmanFordSolve(adjacency_list_t *adjacencyList, linked_list_t *route, nod
         curr = (parent+(curr->x - 1) * adjacencyList->width + curr->y - 1);
     }
     pushLinkedList(&route, curr);
-    free(parent);
-    return;
+    return parent;
 }
 
 int main()
 {
-    adjacency_list_t *adjacencyList = readMazeStructureFromFile("maze2.txt");
+    adjacency_list_t *adjacencyList = readMazeStructureFromFile("150x150-0\%.txt");
     linked_list_t *route = NULL;
     node_t *node_first = createNode(1, 1);
     node_t *node_last = createNode(adjacencyList->height, adjacencyList->width);
     pushLinkedList(&route, node_first);
-    bellmanFordSolve(adjacencyList, route, node_first, node_last);
+    node_t *parentNodes = bellmanFordSolve(adjacencyList, route, node_first, node_last);
     linked_list_t *prev = route;
     route = route->next;
     free(prev);
     reverseLinkedList(&route);
     printLinkedList(route);
+    free(parentNodes);
     for(int i = adjacencyList->height * adjacencyList->width - 1; i >= 0; i--)
     {
         freeAdjacencyList((adjacencyList+i));

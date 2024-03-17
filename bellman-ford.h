@@ -4,6 +4,6 @@
 #include "astar.h"
 #include "data_reader.h"
 
-void bellmanFordSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *startNode, node_t *targetNode);
+node_t *bellmanFordSolve(adjacency_list_t *adjacencyList, linked_list_t *route, node_t *startNode, node_t *targetNode);
 
 #endif
