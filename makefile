@@ -1,43 +1,44 @@
 dfs: prerequisites
-	cc dfs.c data_reader.o maze_structure.o -o dfs
+	cc ./Algorithms/dfs.c data_reader.o maze_structure.o -o dfs
 	rm -rf *.o
 	./dfs
 
 bfs: prerequisites
-	cc bfs.c data_reader.o maze_structure.o -o bfs
+	cc ./Algorithms/bfs.c data_reader.o maze_structure.o -o bfs
 	rm -rf *.o
 	./bfs
 
 random: prerequisites
-	cc random.c data_reader.o maze_structure.o -o random
+	cc ./Algorithms/random.c data_reader.o maze_structure.o -o random
 	rm -rf *.o
 	./random
 
-astar: prerequisites
-	cc -ggdb astar.c data_reader.o maze_structure.o -o astar
+astar: prerequisites wll
+	cc ./Algorithms/astar.c data_reader.o maze_structure.o weighted_linked_list.o -o astar
 	rm -rf *.o
 	./astar
 
-dijkstra: prerequisites
-	cc -c astar.c
-	cc dijkstra.c data_reader.o maze_structure.o astar.o -o dijkstra
+dijkstra: prerequisites wll
+	cc ./Algorithms/dijkstra.c data_reader.o maze_structure.o weighted_linked_list.o -o dijkstra
 	rm -rf *.o
 	./dijkstra
 
-bellman-ford: prerequisites
-	cc -c astar.c
-	cc bellman-ford.c data_reader.o maze_structure.o astar.o -o bellman-ford
+bellman-ford: prerequisites wll
+	cc ./Algorithms/bellman-ford.c data_reader.o maze_structure.o weighted_linked_list.o -o bellman-ford
 	rm -rf *.o
 	./bellman-ford
 
 right-hand: prerequisites
-	cc right-hand.c data_reader.o maze_structure.o -o right-hand
+	cc ./Algorithms/right-hand.c data_reader.o maze_structure.o -o right-hand
 	rm -rf *.o
 	./right-hand
 
+wll:
+	cc -c ./Data/weighted_linked_list.c
+
 prerequisites:
-	cc -c data_reader.c
-	cc -c maze_structure.c
+	cc -c ./Data/data_reader.c
+	cc -c ./Data/maze_structure.c
 
 clean:
 	rm -rf *.o
